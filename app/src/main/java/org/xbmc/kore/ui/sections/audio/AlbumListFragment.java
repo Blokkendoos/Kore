@@ -102,7 +102,8 @@ public class AlbumListFragment extends AbstractCursorListFragment {
         MenuItem sortByAlbum = menu.findItem(R.id.action_sort_by_album),
                 sortByArtist = menu.findItem(R.id.action_sort_by_artist),
                 sortByArtistYear = menu.findItem(R.id.action_sort_by_artist_year),
-                sortByYear = menu.findItem(R.id.action_sort_by_year);
+                sortByYear = menu.findItem(R.id.action_sort_by_year),
+                sortByLatest = menu.findItem(R.id.action_sort_by_latest);
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -120,6 +121,9 @@ public class AlbumListFragment extends AbstractCursorListFragment {
                 break;
             case Settings.SORT_BY_YEAR:
                 sortByYear.setChecked(true);
+                break;
+            case Settings.SORT_BY_LATEST:
+                sortByLatest.setChecked(true);
                 break;
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -154,6 +158,13 @@ public class AlbumListFragment extends AbstractCursorListFragment {
                 item.setChecked(!item.isChecked());
                 preferences.edit()
                         .putInt(Settings.KEY_PREF_ALBUMS_SORT_ORDER, Settings.SORT_BY_YEAR)
+                        .apply();
+                refreshList();
+                break;
+            case R.id.action_sort_by_latest:
+                item.setChecked(!item.isChecked());
+                preferences.edit()
+                        .putInt(Settings.KEY_PREF_ALBUMS_SORT_ORDER, Settings.SORT_BY_LATEST)
                         .apply();
                 refreshList();
                 break;
@@ -209,6 +220,8 @@ public class AlbumListFragment extends AbstractCursorListFragment {
             sortOrderStr = AlbumListQuery.SORT_BY_ARTIST_YEAR;
         } else if (sortOrder == Settings.SORT_BY_YEAR) {
             sortOrderStr = AlbumListQuery.SORT_BY_YEAR;
+        } else if (sortOrder == Settings.SORT_BY_LATEST) {
+            sortOrderStr = AlbumListQuery.SORT_BY_LATEST;
         } else {
             sortOrderStr = AlbumListQuery.SORT_BY_ALBUM;
         }
@@ -267,6 +280,7 @@ public class AlbumListFragment extends AbstractCursorListFragment {
                                      + " COLLATE NOCASE ASC, " + MediaContract.Albums.YEAR + " ASC";
         String SORT_BY_YEAR = MediaContract.Albums.YEAR + " ASC, "
                 + MediaDatabase.sortCommonTokens(MediaContract.Albums.TITLE) + " COLLATE NOCASE ASC";
+        String SORT_BY_LATEST = MediaContract.Albums.ALBUMID + " DESC";
 
         int ID = 0;
         int ALBUMID = 1;
@@ -338,6 +352,8 @@ public class AlbumListFragment extends AbstractCursorListFragment {
                     .getInt(Settings.KEY_PREF_ALBUMS_SORT_ORDER, Settings.DEFAULT_PREF_ALBUMS_SORT_ORDER);
             if (sortOrder == Settings.SORT_BY_YEAR) {
                 return AlbumListQuery.YEAR;
+            } else if (sortOrder == Settings.SORT_BY_LATEST) {
+                return AlbumListQuery.ALBUMID;
             } else {
                 return AlbumListQuery.TITLE;
             }

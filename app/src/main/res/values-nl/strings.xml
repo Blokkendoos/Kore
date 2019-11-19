@@ -237,6 +237,7 @@
   <string name="sort_order">Sorteren</string>
   <string name="sort_by_name">Op naam</string>
   <string name="sort_by_date_added">Op datum toegevoegd</string>
+  <string name="sort_by_latest">Op laatst toegevoegd</string>
   <string name="ignore_prefixes">Voorvoegsels negeren</string>
   <!-- Preferences strings -->
   <string name="theme">Thema</string>

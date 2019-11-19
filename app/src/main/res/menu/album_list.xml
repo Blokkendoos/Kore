@@ -31,6 +31,8 @@
                       android:title="@string/by_artist_and_year"/>
                 <item android:id="@+id/action_sort_by_year"
                       android:title="@string/sort_by_year"/>
+                <item android:id="@+id/action_sort_by_latest"
+                      android:title="@string/sort_by_latest"/>
             </group>
         </menu>
     </item>
